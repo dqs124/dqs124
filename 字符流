@@ -1,0 +1,104 @@
+package cn.dqs;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Arrays;
+
+import org.junit.Test;
+
+/*
+ * 字符流作业
+ *a、使用File类创建源数据源D:\my\io\read.template文件
+ *b、使用字符输出流对read.template文件写入20个汉字内容
+ *c、读取read.template文件内容，对字符进行排序输出到目标文件D:\my\io\readTarget.template中
+ */
+public class Demo2 {
+
+	// 创建File类文件夹
+	public static void createDir(String fileDir) {
+		// 创建目录
+		File f = new File(fileDir);
+		if (!f.exists()) {
+			f.mkdirs();
+			System.out.println("创建目录成功！");
+		} else {
+			System.out.println("目录已经存在！");
+		}
+	}
+
+	@Test
+	public void testCreateDir() {
+		createDir("D:\\my\\io");
+	}
+
+	// 使用字符输出流对read.template文件写入20个汉字内容
+	public static void write(String path, String st) {
+		Writer wt = null;
+		try {
+			wt = new FileWriter(path);
+			wt.write(st);
+			wt.flush();
+			System.out.println("输入成功!");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (wt != null)
+					wt.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Test
+	public void testWrite() {
+		write("D:\\my\\io\\read.template", "社会主义根本任务是解放生产力和发展生产力");
+	}
+
+	// 读取read.template文件内容，对字符进行排序输出到目标文件D:\my\io\readTarget.template中
+	public static void readAndWriter(String origin, String target) {
+		Reader rd = null;
+		Writer wt = null;
+		try {
+			rd = new FileReader(origin);
+			wt = new FileWriter(target);
+			StringBuffer sc = new StringBuffer();
+			int data = 0;
+			while ((data = rd.read()) != -1) {
+				sc.append((char) data);
+			}
+			String st = sc.toString();
+			char[] ch = st.toCharArray();
+			Arrays.sort(ch);
+			wt.write(ch);
+			wt.flush();
+			System.out.println("成功输入到目标文件！");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (wt != null)
+					wt.close();
+				if (rd != null)
+					rd.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Test
+	public void testReadAndWrite() {
+		readAndWriter("D:\\my\\io\\read.template", "D:\\my\\io\\readTarget.template");
+	}
+}
